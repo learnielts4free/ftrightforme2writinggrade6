@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luyện Tập Tiếng Anh - Ms Lê Hằng English</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Nunito', sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(-45deg, #8854C0, #FDCB6E, #00C9A7, #e73c7e);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      position: relative;
+      padding: 20px;
+      color: #2d3436;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    /* SVG Pattern Background Overlay */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 100 100"><text x="10" y="30" font-size="20">⭐</text><text x="50" y="70" font-size="20">🌸</text><text x="70" y="25" font-size="20">🐱</text><text x="20" y="80" font-size="20">🍎</text></svg>');
+      opacity: 0.25;
+      pointer-events: none;
+      z-index: 0;
+      animation: floatPattern 20s linear infinite;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes floatPattern {
+      0% { background-position: 0 0; }
+      100% { background-position: 100px 100px; }
+    }
+
+    .container {
+      max-width: 800px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 24px;
+      padding: 30px 24px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.2), 0 5px 15px rgba(0,0,0,0.07);
+      position: relative;
+      z-index: 1;
+      margin-top: 10px;
+      margin-bottom: 30px;
+    }
+
+    .header-author {
+      text-align: center;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #8854C0;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+      background: #F0E6FF;
+      display: inline-block;
+      padding: 4px 16px;
+      border-radius: 50px;
+    }
+
+    .header-container {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    /* Khung Lời Nhắc */
+    .warning-box {
+      background: #FFF3CD;
+      border: 3px dashed #FFC107;
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 25px;
+      text-align: center;
+      font-weight: 700;
+      color: #856404;
+      box-shadow: 0 4px 0 #ffeBAA;
+    }
+
+    .warning-box h3 {
+      font-size: 1.1rem;
+      margin-bottom: 6px;
+      color: #d39e00;
+    }
+
+    .warning-box p {
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+
+    .section-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #8854C0;
+      margin: 25px 0 15px 0;
+      background: #f7f1ff;
+      padding: 10px 15px;
+      border-radius: 12px;
+      border-left: 5px solid #8854C0;
+      line-height: 1.5;
+    }
+
+    .card {
+      background: #FFFFFF;
+      border: 3px solid #E2E8F0;
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 6px 0 #E2E8F0;
+      transition: transform 0.2s;
+    }
+
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #2D3748;
+      margin-bottom: 15px;
+      line-height: 1.5;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .btn-option {
+      background: #FFFFFF;
+      border: 2px solid #CBD5E0;
+      border-radius: 16px;
+      padding: 12px 18px;
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: #4A5568;
+      cursor: pointer;
+      text-align: left;
+      box-shadow: 0 4px 0 #CBD5E0;
+      transition: all 0.1s ease;
+      outline: none;
+      word-break: break-word;
+    }
+
+    .btn-option:hover:not([disabled]) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 #CBD5E0;
+      background: #F7FAFC;
+    }
+
+    .btn-option:active:not([disabled]) {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 #CBD5E0;
+    }
+
+    .btn-option.correct {
+      background-color: #00D26A !important;
+      border-color: #00B359 !important;
+      color: white !important;
+      box-shadow: 0 4px 0 #00994C !important;
+    }
+
+    .btn-option.wrong {
+      background-color: #FF4757 !important;
+      border-color: #E0303F !important;
+      color: white !important;
+      box-shadow: 0 4px 0 #C42533 !important;
+    }
+
+    /* Khung Giải Thích Chi Tiết */
+    .explanation-box {
+      display: none;
+      margin-top: 15px;
+      padding: 16px;
+      background-color: #F0F4FF;
+      border-left: 6px solid #8854C0;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #2D3748;
+      animation: fadeIn 0.3s ease-in;
+    }
+
+    .explanation-box h4 {
+      color: #8854C0;
+      margin-bottom: 8px;
+      font-size: 1rem;
+    }
+
+    .explanation-box p {
+      margin-bottom: 6px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .shake {
+      animation: shakeAnim 0.4s ease-in-out;
+    }
+
+    @keyframes shakeAnim {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-8px); }
+      40%, 80% { transform: translateX(8px); }
+    }
+
+    /* Nút Nộp Bài */
+    .submit-btn-container {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .btn-submit {
+      background: linear-gradient(180deg, #00C9A7 0%, #00B359 100%);
+      color: white;
+      border: none;
+      font-size: 1.2rem;
+      font-weight: 900;
+      padding: 16px 40px;
+      border-radius: 50px;
+      box-shadow: 0 6px 0 #008040;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 9px 0 #008040;
+    }
+
+    .btn-submit:active {
+      transform: translateY(3px);
+      box-shadow: 0 3px 0 #008040;
+    }
+
+    /* Modal Kết Quả */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 24px;
+      max-width: 500px;
+      width: 100%;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-title {
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: #8854C0;
+      margin-bottom: 10px;
+    }
+
+    .modal-score {
+      font-size: 2.3rem;
+      font-weight: 900;
+      color: #00D26A;
+      margin: 15px 0;
+    }
+
+    .modal-msg {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #4A5568;
+      line-height: 1.5;
+      margin-bottom: 25px;
+    }
+
+    .modal-btn {
+      background: #8854C0;
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      font-size: 1.1rem;
+      font-weight: 800;
+      border-radius: 50px;
+      box-shadow: 0 4px 0 #6C3FB8;
+      cursor: pointer;
+    }
+
+    .modal-btn:hover {
+      background: #773EC0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header-container">
+      <div class="header-author">Giáo viên tạo: Ms Lê Hằng English</div>
+    </div>
+
+    <div class="warning-box">
+      <h3>⚠️ LỜI NHẮC CỰC KỲ QUAN TRỌNG ⚠️</h3>
+      <p>Chỉ có đọc kỹ giải thích ngay sau mỗi câu, sau đó ghi lại từ vựng/cấu trúc mới vào vở để học thì mới thực sự giỏi lên.</p>
+      <p>Làm cho xong mà không đọc giải thích hay đọc qua loa không ghi chép thì chỉ tốn thời gian vô ích!</p>
+      <p style="margin-top: 6px; color: #e67e22;">✨ * Kéo tới đâu, làm tới đó! * ✨</p>
+    </div>
+
+    <!-- PART 1 -->
+    <div class="section-title">PART 1. Multiple Choice Questions (27 - 30)</div>
+    <div id="quiz-part1"></div>
+
+    <!-- PART 2 -->
+    <div class="section-title">PART 2. Sentence Rewriting (42 - 49)</div>
+    <div id="quiz-part2"></div>
+
+    <!-- PART 3 -->
+    <div class="section-title">PART 3. Sentence Reordering (50 - 52)</div>
+    <div id="quiz-part3"></div>
+
+    <!-- PART 4 -->
+    <div class="section-title">PART 4. Sentence Building from Cues (53 - 58)</div>
+    <div id="quiz-part4"></div>
+
+    <div class="submit-btn-container">
+      <button class="btn-submit" onclick="submitQuiz()">Nộp Bài Thi 🎯</button>
+    </div>
+  </div>
+
+  <!-- Modal Kết Quả -->
+  <div class="modal-overlay" id="resultModal">
+    <div class="modal-content">
+      <div class="modal-title">TỔNG KẾT BÀI THI</div>
+      <div class="modal-score" id="scoreText">0 / 21</div>
+      <div class="modal-msg" id="teacherMessage"></div>
+      <button class="modal-btn" onclick="closeModal()">Đóng & Xem Lại</button>
+    </div>
+  </div>
+
+  <script>
+    // Web Audio API Tạo Âm Thanh Tự Động
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    let audioCtx = null;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new AudioContext();
+      }
+    }
+
+    function playSound(type) {
+      initAudio();
+      if (!audioCtx) return;
+
+      if (type === 'correct') {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+        osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.3); // A5
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.3);
+      } else if (type === 'wrong') {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(220, audioCtx.currentTime); // A3
+        osc.frequency.exponentialRampToValueAtTime(130.81, audioCtx.currentTime + 0.4); // C3
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.4);
+      }
+    }
+
+    // Dữ Liệu Đề Bài
+    const rawQuestions = [
+      // PART 1
+      {
+        id: 27,
+        section: 1,
+        question: "Question 27. It is essential that you do your homework before going to school..",
+        options: [
+          "You are essential to do your homework before going to school.",
+          "You must do your homework before going to school.",
+          "You must do your homework before go to school.",
+          "It is important to do your homework before go to schoo"
+        ],
+        correct: 1,
+        explanation: {
+          step1: "Dịch nghĩa câu gốc: 'Cực kỳ cần thiết/bắt buộc là bạn phải làm bài tập về nhà trước khi đến trường.'",
+          step2: "A. You are essential to do... (Sai ngữ pháp)<br>B. You must do your homework before going to school. (Đúng)<br>C. ...before go to school. (Sai vì sau 'before' dùng V-ing)<br>D. ...before go to schoo (Sai ngữ pháp và sai chính tả)",
+          step3: "Cấu trúc thể hiện tính bắt buộc: [It is essential that + S + V] tương đương với động từ khuyết thiếu [S + must + V-bare]. Giới từ 'before' đi với V-ing 'going'. Do đó chọn B.",
+          step4: "A sai cấu trúc biến đổi, C và D mắc lỗi dùng động từ nguyên thể 'go' sau giới từ 'before'."
+        }
+      },
+      {
+        id: 28,
+        section: 1,
+        question: "Question 28. Let’s go camping at the weekend",
+        options: [
+          "What about go camping at the weekend?",
+          "What about to go camping at the weekend?",
+          "What about goes camping at the weekend?",
+          "What about going camping at the weekend?"
+        ],
+        correct: 3,
+        explanation: {
+          step1: "Dịch nghĩa câu gốc: 'Chúng ta hãy đi dã ngoại vào cuối tuần nhé.'",
+          step2: "A. What about go... (Sai V-bare)<br>B. What about to go... (Sai to-V)<br>C. What about goes... (Sai chia động từ)<br>D. What about going camping at the weekend? (Đúng)",
+          step3: "Cấu trúc đưa ra lời gợi ý/rủ rê tương đương: [Let's + V-bare] ⇔ [What about / How about + V-ing?]. Do đó động từ 'go' chuyển thành 'going'. Chọn D.",
+          step4: "A dùng V-bare, B dùng to-V, C dùng động từ chia 'goes' đều vi phạm quy tắc phải dùng V-ing sau giới từ 'about'."
+        }
+      },
+      {
+        id: 29,
+        section: 1,
+        question: "Question 29. This site/ famous/ thrilling/ scenery.",
+        options: [
+          "This site is famous thrilling scenery.",
+          "This site is famous as thrilling scenery.",
+          "This site is famous for thrilling scenery.",
+          "This site is famous with thrilling scenery."
+        ],
+        correct: 2,
+        explanation: {
+          step1: "Dịch nghĩa: 'Địa điểm này nổi tiếng vì phong cảnh ngoạn mục.'",
+          step2: "A. ...famous thrilling... (Thiếu giới từ)<br>B. ...famous as... (Sai nghĩa: nổi tiếng với tư cách là)<br>C. This site is famous for thrilling scenery. (Đúng)<br>D. ...famous with... (Sai giới từ đi với famous)",
+          step3: "Cấu trúc tính từ đi kèm giới từ cố định chỉ lý do nổi tiếng: [be famous for something] (nổi tiếng về/vì cái gì). Do đó chọn C.",
+          step4: "A thiếu giới từ, B dùng 'famous as' làm sai nghĩa gốc, D dùng sai giới từ 'with'."
+        }
+      },
+      {
+        id: 30,
+        section: 1,
+        question: "Question 30. higher/ building/ This/ that/ is/ than/ one..",
+        options: [
+          "This is building higher than that one.",
+          "This building is higher than that one.",
+          "This building is one than higher that.",
+          "This building is that one higher than."
+        ],
+        correct: 1,
+        explanation: {
+          step1: "Dịch nghĩa: 'Tòa nhà này thì cao hơn tòa nhà kia.'",
+          step2: "A. This is building... (Sai trật tự chủ ngữ)<br>B. This building is higher than that one. (Đúng)<br>C. ...one than higher... (Sai trật tự từ)<br>D. ...that one higher than. (Sai trật tự từ)",
+          step3: "Cấu trúc so sánh hơn với tính từ ngắn: [Chủ ngữ 1 (This building) + be (is) + Adj-er (higher) + than + Chủ ngữ 2 (that one)]. Chọn B.",
+          step4: "A, C, D đều bị sắp xếp xáo trộn trật tự tính từ so sánh và chủ ngữ không đúng cú pháp."
+        }
+      },
+
+      // PART 2
+      {
+        id: 42,
+        section: 2,
+        question: "Question 42. It’s very important for you to be here at 6.00. → You...",
+        options: [
+          "You must be here at 6.00.",
+          "You can be here at 6.00.",
+          "You should be here at 6.00.",
+          "You may be here at 6.00."
+        ],
+        correct: 0,
+        explanation: {
+          step1: "Dịch nghĩa: 'Rất quan trọng/bắt buộc là bạn phải có mặt ở đây lúc 6:00.' → Bạn phải có mặt ở đây lúc 6:00.",
+          step2: "A. You must be here at 6.00. (Đúng)<br>B. You can be... (Bạn có thể...)<br>C. You should be... (Bạn nên...)<br>D. You may be... (Bạn có lẽ...)",
+          step3: "Cấu trúc thể hiện tầm quan trọng bắt buộc: [It is important/necessary for sb to V] tương đương với động từ khuyết thiếu [S + must + V-bare]. Do đó chọn A.",
+          step4: "B, C, D sử dụng các động từ khuyết thiếu chỉ khả năng (can/may) hoặc lời khuyên nhẹ (should), không thể hiện hết mức độ 'very important'."
+        }
+      },
+      {
+        id: 43,
+        section: 2,
+        question: "Question 43. How about going to the cinema this weekend? → Let’s...",
+        options: [
+          "Let’s go to the cinema this weekend.",
+          "Let’s going to the cinema this weekend.",
+          "Let’s to go to the cinema this weekend.",
+          "Let’s go to cinema this weekend."
+        ],
+        correct: 0,
+        explanation: {
+          step1: "Dịch nghĩa: 'Cuối tuần này đi xem phim nhé?' → Chúng ta hãy đi xem phim vào cuối tuần này.",
+          step2: "A. Let’s go to the cinema this weekend. (Đúng)<br>B. Let’s going... (Sai V-ing)<br>C. Let’s to go... (Sai to-V)<br>D. ...go to cinema... (Thiếu mạo từ 'the')",
+          step3: "Cấu trúc đưa ra lời đề nghị rủ rê: [How about + V-ing?] ⇔ [Let's + V-bare]. Động từ 'going' đổi về nguyên mẫu là 'go', giữ nguyên cụm 'go to the cinema'.",
+          step4: "B dùng V-ing, C dùng to-V, D thiếu mạo từ 'the' trong cụm từ cố định 'go to the cinema'."
+        }
+      },
+      {
+        id: 44,
+        section: 2,
+        question: "Question 44. The Nile River is the longest river in the world. → No other river in the world is...",
+        options: [
+          "No other river in the world is longer than the Nile River.",
+          "No other river in the world is as long than the Nile River.",
+          "No other river in the world is the longest than the Nile River.",
+          "No other river in the world is longest as the Nile River."
+        ],
+        correct: 0,
+        explanation: {
+          step1: "Dịch nghĩa: 'Sông Nin là con sông dài nhất trên thế giới.' → Không có con sông nào trên thế giới dài hơn sông Nin.",
+          step2: "A. No other river in the world is longer than the Nile River. (Đúng)<br>B. ...as long than... (Sai kết hợp cấu trúc)<br>C. ...the longest than... (Sai kết hợp so sánh)<br>D. ...longest as... (Sai ngữ pháp)",
+          step3: "Chuyển đổi từ So sánh nhất sang So sánh hơn kém phủ định: [S1 + be + the + Adj-est] ⇔ [No other + N + be + Adj-er + than + S1]. Do đó tính từ 'longest' đổi thành 'longer than'.",
+          step4: "B, C, D trộn lẫn các từ của so sánh bằng, so sánh hơn và so sánh nhất làm sai quy tắc ngữ pháp."
+        }
+      },
+      {
+        id: 45,
+        section: 2,
+        question: "Question 45. No smoking is allowed in the campsite. → You...",
+        options: [
+          "You mustn’t smoke in the campsite.",
+          "You don't have to smoke in the campsite.",
+          "You shouldn't smoke in the campsite.",
+          "You can't smoking in the campsite."
+        ],
+        correct: 0,
+        explanation: {
+          step1: "Dịch nghĩa: 'Không được phép hút thuốc trong khu cắm trại.' → Bạn không được phép hút thuốc trong khu cắm trại.",
+          step2: "A. You mustn’t smoke in the campsite. (Đúng)<br>B. You don't have to... (Bạn không cần phải...)<br>C. You shouldn't... (Bạn không nên...)<br>D. You can't smoking... (Sai dạng V-ing sau can't)",
+          step3: "Cấu trúc cấm đoán: [No + V-ing + is allowed] ⇔ [S + mustn't + V-bare]. Do đó chọn 'mustn't smoke'.",
+          step4: "B có nghĩa là không cần thiết, C chỉ là lời khuyên, D dùng 'smoking' sai dạng sau động từ khuyết thiếu."
+        }
+      },
+      {
+        id: 46,
+        section: 2,
+        question: "Question 46. It’s not good to spend a lot of time watching TV. → You...",
+        options: [
+          "You shouldn’t spend a lot of time watching TV.",
+          "You mustn’t spend a lot of time watching TV.",
+          "You don't need spend a lot of time watching TV.",
+          "You can't spend a lot of time watching TV."
+        ],
+        correct: 0,
+        explanation: {
+          step1: "Dịch nghĩa: 'Không tốt khi dành quá nhiều thời gian xem TV.' → Bạn không nên dành nhiều thời gian xem TV.",
+          step2: "A. You shouldn’t spend a lot of time watching TV. (Đúng)<br>B. You mustn’t... (Bạn cấm không được...)<br>C. You don't need spend... (Thiếu 'to')<br>D. You can't... (Bạn không thể...)",
+          step3: "Cấu trúc đưa ra lời khuyên khuyên bảo: [It's not good + to V] ⇔ [S + shouldn't + V-bare]. Chọn A.",
+          step4: "B mang tính cấm đoán pháp luật quá nặng, C sai ngữ pháp thiếu 'to', D chỉ khả năng chứ không chỉ lời khuyên."
+        }
+      },
+      {
+        id: 47,
+        section: 2,
+        question: "Question 47. Could you show me the way to the post office? → Could you tell me how...",
+        options: [
+          "Could you tell me how to get to the post office?",
+          "Could you tell me how get to the post office?",
+          "Could you tell me how I getting to the post office?",
+          "Could you tell me how to getting to the post office?"
+        ],
+        correct: 0,
+        explanation: {
+          step1: "Dịch nghĩa: 'Bạn có thể chỉ đường cho tôi đến bưu điện được không?' → Bạn có thể nói cho tôi biết làm thế nào để đến bưu điện được không?",
+          step2: "A. Could you tell me how to get to the post office? (Đúng)<br>B. ...how get... (Thiếu 'to')<br>C. ...I getting... (Sai V-ing)<br>D. ...to getting... (Sai V-ing sau to)",
+          step3: "Cấu trúc hỏi đường gián tiếp: [Could you show me the way to + Place?] ⇔ [Could you tell me how to get to + Place?]. Chọn A.",
+          step4: "B thiếu 'to', C dùng 'getting' thiếu động từ to be, D dùng 'to getting' sai quy tắc."
+        }
+      },
+      {
+        id: 48,
+        section: 2,
+        question: "Question 48. My bedroom has a nice bed and a bookshelf. → There...",
+        options: [
+          "There is a nice bed and a bookshelf in my bedroom.",
+          "There are a nice bed and a bookshelf in my bedroom.",
+          "There have a nice bed and a bookshelf in my bedroom.",
+          "There is a nice bed and a bookshelf on my bedroom."
+        ],
+        correct: 0,
+        explanation: {
+          step1: "Dịch nghĩa: 'Phòng ngủ của tôi có một chiếc giường đẹp và một giá sách.' → Có một chiếc giường đẹp và một giá sách trong phòng ngủ của tôi.",
+          step2: "A. There is a nice bed and a bookshelf in my bedroom. (Đúng)<br>B. There are... (Ưu tiên dùng 'is' theo danh từ đếm được số ít gần nhất)<br>C. There have... (Sai cấu trúc 'There be')<br>D. ...on my bedroom (Sai giới từ)",
+          step3: "Cấu trúc chuyển đổi giữa sở hữu và sự tồn tại: [S + has/have + N] ⇔ [There is/are + N + in...]. Danh từ đứng ngay sau to be là số ít 'a nice bed' nên chia là 'There is'. Giới từ dùng 'in'.",
+          step4: "B chưa chuẩn tắc liệt kê danh từ số ít đứng đầu, C dùng 'There have' sai ngữ pháp cơ bản, D dùng giới từ 'on' sai."
+        }
+      },
+      {
+        id: 49,
+        section: 2,
+        question: "Question 49. Turn right at the first turning. → Take...",
+        options: [
+          "Take the first turning on the right.",
+          "Take right at the first turning.",
+          "Take the first turning at the right.",
+          "Take to turn right at the first turning."
+        ],
+        correct: 0,
+        explanation: {
+          step1: "Dịch nghĩa: 'Rẽ phải ở điểm rẽ đầu tiên.' → Đi theo điểm rẽ đầu tiên bên tay phải.",
+          step2: "A. Take the first turning on the right. (Đúng)<br>B. ...Take right... (Chắp ghép từ)<br>C. ...at the right (Sai giới từ)<br>D. (Sai cấu trúc)",
+          step3: "Cấu trúc chỉ đường chuẩn: [Turn right/left at the... turning] ⇔ [Take the... turning on the right/left]. Do đó chọn A.",
+          step4: "B, C, D không dùng đúng cụm từ chỉ đường tiêu chuẩn với giới từ 'on the right'."
+        }
+      },
+
+      // PART 3
+      {
+        id: 50,
+        section: 3,
+        question: "Question 50. supermarket/ is/ my/ to/ there/ next/ a/ house.",
+        options: [
+          "There is a supermarket next to my house.",
+          "There is next to my house a supermarket.",
+          "A supermarket is there next to my house.",
+          "There a supermarket is next to my house."
+        ],
+        correct: 0,
+        explanation: {
+          step1: "Dịch nghĩa: 'Có một siêu thị ở ngay bên cạnh nhà tôi.'",
+          step2: "A. There is a supermarket next to my house. (Đúng)<br>B. ...next to my house a supermarket. (Sai trật tự cụm từ)<br>C. A supermarket is there... (Sai cấu trúc 'There is')<br>D. There a supermarket is... (Sai trật tự to be)",
+          step3: "Trật tự câu chuẩn chỉ sự tồn tại: [There is + a/an + N (số ít) + cụm chỉ vị trí (next to my house)]. Chọn A.",
+          step4: "B, C, D xáo trộn vị trí động từ to be và vị trí danh từ chính không đúng cấu trúc."
+        }
+      },
+      {
+        id: 51,
+        section: 3,
+        question: "Question 51. money/ mustn’t/ cards/ during/Tet/ play/ we/ for.",
+        options: [
+          "We mustn’t play cards for money during Tet.",
+          "We mustn’t play money for cards during Tet.",
+          "During Tet we play cards mustn’t for money.",
+          "We play cards mustn’t for money during Tet."
+        ],
+        correct: 0,
+        explanation: {
+          step1: "Dịch nghĩa: 'Chúng ta không được phép đánh bài ăn tiền trong suốt ngày Tết.'",
+          step2: "A. We mustn’t play cards for money during Tet. (Đúng)<br>B. ...play money for cards... (Sai nghĩa: chơi tiền ăn bài)<br>C. ...play cards mustn't... (Sai vị trí mustn't)<br>D. ...play cards mustn't... (Sai vị trí mustn't)",
+          step3: "Trật tự từ trong câu cấm đoán: Chủ ngữ (We) + động từ khuyết thiếu (mustn’t) + động từ chính (play) + tân ngữ (cards) + cụm mục đích (for money) + cụm thời gian (during Tet).",
+          step4: "B làm đảo lộn ý nghĩa thực tế, C và D đặt động từ khuyết thiếu 'mustn't' sai vị trí."
+        }
+      },
+      {
+        id: 52,
+        section: 3,
+        question: "Question 52. at/ become/ noisier/ streets/weekends.",
+        options: [
+          "Streets become noisier at weekends.",
+          "Streets noisier become at weekends.",
+          "At weekends noisier streets become.",
+          "Streets become at weekends noisier."
+        ],
+        correct: 0,
+        explanation: {
+          step1: "Dịch nghĩa: 'Đường phố trở nên ồn ào hơn vào những ngày cuối tuần.'",
+          step2: "A. Streets become noisier at weekends. (Đúng)<br>B. ...noisier become... (Sai vị trí tính từ)<br>C. ...noisier streets... (Sai trật tự từ)<br>D. ...become at weekends noisier (Đưa cụm thời gian vào giữa động từ và tính từ)",
+          step3: "Cấu trúc câu nối với động từ liên kết (linking verb): [Chủ ngữ (Streets) + động từ liên kết (become) + tính từ (noisier) + cụm thời gian (at weekends)].",
+          step4: "B, C, D đặt tính từ 'noisier' và cụm thời gian 'at weekends' sai vị trí ngữ pháp."
+        }
+      },
+
+      // PART 4
+      {
+        id: 53,
+        section: 4,
+        question: "Question 53. You / can / games / afternoon / but / must / homework / evening.",
+        options: [
+          "You can play games in the afternoon, but you must do your homework in the evening.",
+          "You can playing games in afternoon, but you must doing homework in evening.",
+          "You can play games at afternoon, but you must do homework at evening.",
+          "You can play games on the afternoon, but you must do your homework on the evening."
+        ],
+        correct: 0,
+        explanation: {
+          step1: "Dịch nghĩa: 'Bạn có thể chơi game vào buổi chiều, nhưng bạn phải làm bài tập về nhà vào buổi tối.'",
+          step2: "A. You can play games in the afternoon, but you must do your homework in the evening. (Đúng)<br>B. ...playing...doing... (Sai V-ing)<br>C. ...at afternoon...at evening (Sai giới từ)<br>D. ...on the afternoon... (Sai giới từ)",
+          step3: "Bổ sung các thành phần hoàn chỉnh: Động từ 'play games', 'do homework'. Động từ theo sau 'can' và 'must' ở dạng nguyên mẫu. Giới từ chỉ buổi trong ngày dùng 'in the afternoon' và 'in the evening'.",
+          step4: "B dùng V-ing sau động từ khuyết thiếu, C và D dùng sai giới từ chỉ thời gian ('at' và 'on')."
+        }
+      },
+      {
+        id: 54,
+        section: 4,
+        question: "Question 54. Lan / walk / ride / bike / school?",
+        options: [
+          "Does Lan walk or ride her bike to school?",
+          "Is Lan walk or ride bike to school?",
+          "Does Lan walks or rides her bike to school?",
+          "Do Lan walk or ride her bike to school?"
+        ],
+        correct: 0,
+        explanation: {
+          step1: "Dịch nghĩa: 'Lan đi bộ hay đi xe đạp đến trường?'",
+          step2: "A. Does Lan walk or ride her bike to school? (Đúng)<br>B. Is Lan walk... (Sai to be với động từ thường)<br>C. ...walks or rides... (Đã có 'Does' thì động từ không chia s/es)<br>D. Do Lan... (Sai trợ động từ số ít)",
+          step3: "Cấu trúc câu hỏi lựa chọn ở thì Hiện tại đơn: [Does + S (Lan) + V-bare (walk) + or + V-bare (ride) + her bike to school?].",
+          step4: "B dùng to be 'Is' với động từ thường, C chưa đưa động từ về nguyên mẫu sau trợ động từ 'Does', D dùng trợ động từ 'Do' sai số ít."
+        }
+      },
+      {
+        id: 55,
+        section: 4,
+        question: "Question 55. When / it / hot / we / often / go / swim.",
+        options: [
+          "When it is hot, we often go swimming.",
+          "When it hot, we often go to swim.",
+          "When it is hot, we often go swim.",
+          "When it hot, we often go swimming."
+        ],
+        correct: 0,
+        explanation: {
+          step1: "Dịch nghĩa: 'Khi trời nóng, chúng tôi thường đi bơi.'",
+          step2: "A. When it is hot, we often go swimming. (Đúng)<br>B. When it hot... (Thiếu to be 'is')<br>C. ...go swim (Thiếu -ing)<br>D. When it hot... (Thiếu to be 'is')",
+          step3: "Bổ sung động từ to be 'is' sau chủ ngữ chỉ thời tiết 'it'. Cụm từ đi bơi tiêu chuẩn: 'go swimming' (go + V-ing).",
+          step4: "B và D thiếu động từ to be 'is' làm vị ngữ cho tính từ 'hot', C chưa đổi 'swim' thành 'swimming'."
+        }
+      },
+      {
+        id: 56,
+        section: 4,
+        question: "Question 56. What / there / front / your house?",
+        options: [
+          "What is there in front of your house?",
+          "What is there in front your house?",
+          "What there is in front of your house?",
+          "What are there in front of your house?"
+        ],
+        correct: 0,
+        explanation: {
+          step1: "Dịch nghĩa: 'Có cái gì ở phía trước nhà của bạn thế?'",
+          step2: "A. What is there in front of your house? (Đúng)<br>B. ...in front your house (Thiếu 'of')<br>C. ...there is... (Chưa đảo to be)<br>D. ...What are there... (Chưa phù hợp bằng 'What is there' khi hỏi chung vật chưa biết)",
+          step3: "Cấu trúc câu hỏi sự tồn tại với từ hỏi: [What + is there + cụm chỉ vị trí (in front of your house)?].",
+          step4: "B thiếu giới từ 'of' trong cụm 'in front of', C chưa đảo to be ra trước 'there'."
+        }
+      },
+      {
+        id: 57,
+        section: 4,
+        question: "Question 57. If / you / not feel / well / should / see / doctor.",
+        options: [
+          "If you don't feel well, you should see a doctor.",
+          "If you not feel well, you should see a doctor.",
+          "If you don't feel well, should see doctor.",
+          "If you isn't feel well, you should see a doctor."
+        ],
+        correct: 0,
+        explanation: {
+          step1: "Dịch nghĩa: 'Nếu bạn cảm thấy không khỏe, bạn nên đi khám bác sĩ.'",
+          step2: "A. If you don't feel well, you should see a doctor. (Đúng)<br>B. ...you not feel... (Thiếu trợ động từ 'don't')<br>C. ...should see doctor (Thiếu chủ ngữ vế sau và mạo từ 'a')<br>D. ...you isn't feel... (Dùng 'isn't' sai)",
+          step3: "Mệnh đề điều kiện loại 1: Mệnh đề If dùng Hiện tại đơn phủ định [don't feel well], mệnh đề chính dùng lời khuyên [S + should + V-bare (see a doctor)].",
+          step4: "B phủ định thiếu trợ động từ 'don't', C thiếu chủ ngữ 'you' ở vế thứ hai, D dùng sai to be 'isn't' với động từ thường."
+        }
+      },
+      {
+        id: 58,
+        section: 4,
+        question: "Question 58. What color / your baby / eyes?",
+        options: [
+          "What color are your baby's eyes?",
+          "What color is your baby eyes?",
+          "What color are your baby eyes?",
+          "What color is your baby's eyes?"
+        ],
+        correct: 0,
+        explanation: {
+          step1: "Dịch nghĩa: 'Đôi mắt của em bé nhà bạn có màu gì?'",
+          step2: "A. What color are your baby's eyes? (Đúng)<br>B. ...is your baby eyes (Sai to be số nhiều và thiếu sở hữu cách)<br>C. ...your baby eyes (Thiếu sở hữu cách 's)<br>D. ...is your baby's eyes (Sai động từ to be số nhiều)",
+          step3: "Hỏi màu sắc của bộ phận số nhiều 'eyes': [What color + are + danh từ sở hữu cách (your baby's eyes)?]. Do 'eyes' có 's' nên dùng to be 'are'.",
+          step4: "B và D dùng 'is' sai số nhiều của 'eyes', C thiếu dấu sở hữu cách 's sau 'baby'."
+        }
+      }
+    ];
+
+    function shuffleArray(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    let processedQuestions = [];
+    let userAnswers = {};
+
+    function initQuiz() {
+      const p1Container = document.getElementById('quiz-part1');
+      const p2Container = document.getElementById('quiz-part2');
+      const p3Container = document.getElementById('quiz-part3');
+      const p4Container = document.getElementById('quiz-part4');
+
+      p1Container.innerHTML = '';
+      p2Container.innerHTML = '';
+      p3Container.innerHTML = '';
+      p4Container.innerHTML = '';
+
+      processedQuestions = rawQuestions.map((q) => {
+        const indexedOptions = q.options.map((opt, idx) => ({
+          text: opt,
+          isCorrect: idx === q.correct
+        }));
+
+        return {
+          ...q,
+          shuffledOptions: shuffleArray(indexedOptions)
+        };
+      });
+
+      processedQuestions.forEach((q, index) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.id = `question-card-${index}`;
+
+        const title = document.createElement('div');
+        title.className = 'card-title';
+        title.innerHTML = q.question;
+        card.appendChild(title);
+
+        const optionsGrid = document.createElement('div');
+        optionsGrid.className = 'options-grid';
+
+        const labels = ['A', 'B', 'C', 'D'];
+        q.shuffledOptions.forEach((opt, optIndex) => {
+          const btn = document.createElement('button');
+          btn.className = 'btn-option';
+          btn.innerHTML = `<strong>${labels[optIndex]}.</strong> ${opt.text}`;
+          btn.onclick = () => handleSelectAnswer(index, optIndex, opt.isCorrect, card);
+          optionsGrid.appendChild(btn);
+        });
+
+        card.appendChild(optionsGrid);
+
+        // Khung Giải Thích Chi Tiết
+        const expBox = document.createElement('div');
+        expBox.className = 'explanation-box';
+        expBox.id = `exp-${index}`;
+        expBox.innerHTML = `
+          <h4>💡 PHẦN GIẢI THÍCH CHI TIẾT (Ms Lê Hằng English):</h4>
+          <p><strong>1. Phân tích & Dịch nghĩa:</strong> ${q.explanation.step1}</p>
+          <p><strong>2. Xem xét các đáp án:</strong><br>${q.explanation.step2}</p>
+          <p><strong>3. Tại sao chọn đáp án đúng?</strong> ${q.explanation.step3}</p>
+          <p><strong>4. Lý do các đáp án còn lại chưa đúng:</strong> ${q.explanation.step4}</p>
+        `;
+        card.appendChild(expBox);
+
+        if (q.section === 1) {
+          p1Container.appendChild(card);
+        } else if (q.section === 2) {
+          p2Container.appendChild(card);
+        } else if (q.section === 3) {
+          p3Container.appendChild(card);
+        } else {
+          p4Container.appendChild(card);
+        }
+      });
+    }
+
+    function handleSelectAnswer(qIndex, optIndex, isCorrect, cardElement) {
+      if (userAnswers[qIndex] !== undefined) return;
+
+      userAnswers[qIndex] = isCorrect;
+      const buttons = cardElement.querySelectorAll('.btn-option');
+
+      buttons.forEach((btn, idx) => {
+        btn.disabled = true;
+        if (idx === optIndex) {
+          if (isCorrect) {
+            btn.classList.add('correct');
+            playSound('correct');
+            confetti({
+              particleCount: 50,
+              spread: 60,
+              origin: { y: 0.7 }
+            });
+          } else {
+            btn.classList.add('wrong');
+            playSound('wrong');
+            cardElement.classList.add('shake');
+            setTimeout(() => cardElement.classList.remove('shake'), 500);
+          }
+        }
+        
+        if (!isCorrect && processedQuestions[qIndex].shuffledOptions[idx].isCorrect) {
+          btn.classList.add('correct');
+        }
+      });
+
+      document.getElementById(`exp-${qIndex}`).style.display = 'block';
+    }
+
+    function submitQuiz() {
+      const total = processedQuestions.length;
+      let score = 0;
+      
+      for (let i = 0; i < total; i++) {
+        if (userAnswers[i] === true) {
+          score++;
+        }
+      }
+
+      const percent = (score / total) * 100;
+      document.getElementById('scoreText').innerText = `${score} / ${total} Câu`;
+
+      let msg = "";
+      if (percent < 50) {
+        msg = "Điểm lần này chưa cao lắm, con cố gắng đọc kỹ giải thích đáp án và làm lại nha. Cô tin con sẽ làm tốt hơn ở lần sau! 💖";
+      } else if (percent <= 80) {
+        msg = "Con đã có tiến bộ khá ổn rồi, con cố gắng đọc kỹ giải thích đáp án và làm lại nha. Cô tin con sẽ làm tốt hơn ở lần sau! ⭐";
+      } else {
+        msg = "Làm tốt lắm, con cố gắng ring điểm 10 ở lần sau nha! 🎉🏆";
+      }
+
+      document.getElementById('teacherMessage').innerText = msg;
+      document.getElementById('resultModal').style.display = 'flex';
+
+      if (percent >= 80) {
+        confetti({
+          particleCount: 150,
+          spread: 100,
+          origin: { y: 0.5 }
+        });
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('resultModal').style.display = 'none';
+    }
+
+    window.onload = initQuiz;
+  </script>
+</body>
+</html>
